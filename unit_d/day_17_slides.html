@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 17 — Unit D: Neue App (Capstone)</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #111;
+    --fg: #F0EDE6;
+    --fg-dim: #9A958C;
+    --amber: hsl(46, 90%, 53%);
+    --amber-bg: hsl(46, 40%, 8%);
+    --blue: hsl(210, 80%, 62%);
+    --blue-bg: hsl(210, 50%, 9%);
+    --violet: hsl(270, 60%, 65%);
+    --violet-bg: hsl(270, 40%, 9%);
+    --green: hsl(155, 60%, 50%);
+    --green-bg: hsl(155, 35%, 8%);
+    --red: hsl(0, 65%, 55%);
+    --pad: 80px;
+  }
+
+  html { font-size: 19.2px; }
+  body {
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Deck ── */
+  .deck { position: relative; width: 100vw; height: 100vh; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex;
+    opacity: 0; pointer-events: none;
+    transform: translateX(40px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .slide.active {
+    opacity: 1; pointer-events: auto;
+    transform: translateX(0);
+  }
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  .slide.exit-right {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  /* ── Keyframes ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes popIn {
+    0%   { opacity: 0; transform: scale(0); }
+    70%  { transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes growDown {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+  @keyframes widen {
+    from { width: 0; }
+    to   { width: 100%; }
+  }
+
+  /* ── Staggered entrance: children of active slides ── */
+  .slide.active > h1, .slide.active > h2, .slide.active > h3,
+  .slide.active > p, .slide.active > div, .slide.active > ol, .slide.active > ul {
+    animation: fadeUp 0.5s ease both;
+  }
+  .slide.active > :nth-child(1) { animation-delay: 0.08s; }
+  .slide.active > :nth-child(2) { animation-delay: 0.18s; }
+  .slide.active > :nth-child(3) { animation-delay: 0.28s; }
+  .slide.active > :nth-child(4) { animation-delay: 0.38s; }
+  .slide.active > :nth-child(5) { animation-delay: 0.46s; }
+  .slide.active > :nth-child(6) { animation-delay: 0.52s; }
+
+  /* Billboard headings: scale entrance */
+  .billboard.active > h1 {
+    animation: scaleUp 0.6s ease both;
+    animation-delay: 0.1s;
+  }
+  .divider.active > h1 {
+    animation: scaleUp 0.6s ease both;
+    animation-delay: 0.1s;
+  }
+
+  /* Cards: stagger individually */
+  .slide.active .card {
+    animation: fadeUp 0.45s ease both;
+  }
+  .slide.active .card:nth-child(1) { animation-delay: 0.2s; }
+  .slide.active .card:nth-child(2) { animation-delay: 0.32s; }
+  .slide.active .card:nth-child(3) { animation-delay: 0.44s; }
+
+  /* Card top-border widen effect */
+  .card { border-top-color: transparent; position: relative; }
+  .card::after {
+    content: "";
+    position: absolute; top: -4px; left: 0; height: 4px;
+    width: 0;
+    background: var(--card-color, var(--fg-dim));
+    transition: none;
+  }
+  .slide.active .card::after {
+    animation: widen 0.4s ease both;
+  }
+  .slide.active .card:nth-child(1)::after { animation-delay: 0.35s; }
+  .slide.active .card:nth-child(2)::after { animation-delay: 0.47s; }
+  .slide.active .card:nth-child(3)::after { animation-delay: 0.59s; }
+
+  /* Timeline items: stagger with dot pop */
+  .slide.active .timeline-item {
+    animation: fadeUp 0.4s ease both;
+  }
+  .slide.active .timeline-item:nth-child(1)  { animation-delay: 0.15s; }
+  .slide.active .timeline-line:nth-child(2)   { animation: fadeUp 0.3s ease both; animation-delay: 0.3s; }
+  .slide.active .timeline-item:nth-child(3)  { animation-delay: 0.4s; }
+  .slide.active .timeline-line:nth-child(4)   { animation: fadeUp 0.3s ease both; animation-delay: 0.55s; }
+  .slide.active .timeline-item:nth-child(5)  { animation-delay: 0.65s; }
+  .slide.active .timeline-line:nth-child(6)   { animation: fadeUp 0.3s ease both; animation-delay: 0.8s; }
+  .slide.active .timeline-item:nth-child(7)  { animation-delay: 0.9s; }
+  .slide.active .timeline-line:nth-child(8)   { animation: fadeUp 0.3s ease both; animation-delay: 1.05s; }
+  .slide.active .timeline-item:nth-child(9)  { animation-delay: 1.15s; }
+
+  .slide.active .timeline-dot {
+    animation: popIn 0.4s ease both;
+  }
+  .slide.active .timeline-item:nth-child(1) .timeline-dot { animation-delay: 0.2s; }
+  .slide.active .timeline-item:nth-child(3) .timeline-dot { animation-delay: 0.45s; }
+  .slide.active .timeline-item:nth-child(5) .timeline-dot { animation-delay: 0.7s; }
+  .slide.active .timeline-item:nth-child(7) .timeline-dot { animation-delay: 0.95s; }
+  .slide.active .timeline-item:nth-child(9) .timeline-dot { animation-delay: 1.2s; }
+
+  /* Steps: stagger with circle pop */
+  .slide.active .steps li {
+    animation: fadeUp 0.4s ease both;
+  }
+  .slide.active .steps li:nth-child(1) { animation-delay: 0.2s; }
+  .slide.active .steps li:nth-child(2) { animation-delay: 0.35s; }
+  .slide.active .steps li:nth-child(3) { animation-delay: 0.5s; }
+  .slide.active .steps li:nth-child(4) { animation-delay: 0.65s; }
+  .slide.active .steps li:nth-child(5) { animation-delay: 0.8s; }
+
+  /* Numbered list stagger */
+  .slide.active .numbered li {
+    animation: fadeUp 0.4s ease both;
+  }
+  .slide.active .numbered li:nth-child(1) { animation-delay: 0.2s; }
+  .slide.active .numbered li:nth-child(2) { animation-delay: 0.32s; }
+  .slide.active .numbered li:nth-child(3) { animation-delay: 0.44s; }
+  .slide.active .numbered li:nth-child(4) { animation-delay: 0.56s; }
+
+  /* Policy pair stagger */
+  .slide.active .policy:nth-child(1) { animation: fadeUp 0.45s ease both; animation-delay: 0.2s; }
+  .slide.active .policy:nth-child(2) { animation: fadeUp 0.45s ease both; animation-delay: 0.38s; }
+
+  /* Section bar: grow from top */
+  .slide.active::before {
+    transform-origin: top;
+    animation: growDown 0.4s ease both;
+    animation-delay: 0s;
+  }
+
+  /* Resource list stagger */
+  .slide.active .resource-list li {
+    animation: fadeUp 0.35s ease both;
+  }
+  .slide.active .resource-list li:nth-child(1) { animation-delay: 0.12s; }
+  .slide.active .resource-list li:nth-child(2) { animation-delay: 0.2s; }
+  .slide.active .resource-list li:nth-child(3) { animation-delay: 0.28s; }
+  .slide.active .resource-list li:nth-child(4) { animation-delay: 0.36s; }
+  .slide.active .resource-list li:nth-child(5) { animation-delay: 0.44s; }
+
+  /* ── Section bar (left edge color indicator) ── */
+  .slide::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: var(--section-color, transparent);
+  }
+
+  /* ── Layout: Billboard (centered single statement) ── */
+  .billboard {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--pad);
+  }
+  .billboard h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+  }
+  .billboard .sub {
+    font-size: 1.6rem;
+    color: var(--fg-dim);
+    margin-top: 24px;
+    max-width: 650px;
+    line-height: 1.5;
+  }
+
+  /* ── Layout: Section Divider (color wash) ── */
+  .divider {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--pad);
+    background: var(--section-bg, var(--bg));
+  }
+  .divider::before { display: none; }
+  .divider h1 {
+    font-size: 4.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .divider .sub {
+    font-size: 1.6rem;
+    color: var(--fg-dim);
+    margin-top: 20px;
+    font-weight: 400;
+  }
+
+  /* ── Layout: Content (left-aligned, vertically centered) ── */
+  .content {
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--pad);
+    padding-left: calc(var(--pad) + 20px);
+    gap: 28px;
+  }
+  .content h2 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Layout: Split (left label + right content) ── */
+  .split {
+    align-items: center;
+    padding: var(--pad);
+    padding-left: calc(var(--pad) + 20px);
+    gap: 60px;
+  }
+  .split .left {
+    flex: 0 0 35%;
+  }
+  .split .left h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .split .right {
+    flex: 1;
+  }
+
+  /* ── Layout: Top-aligned (cards, grids) ── */
+  .top {
+    flex-direction: column;
+    padding: var(--pad);
+    padding-left: calc(var(--pad) + 20px);
+    padding-top: 60px;
+    gap: 20px;
+  }
+  .top h2 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Typography ── */
+  p, li { font-size: 1.5rem; line-height: 1.55; }
+
+  .big-text {
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .callout {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .small { font-size: 1.25rem; color: var(--fg-dim); }
+
+  /* ── Cards ── */
+  .card-row {
+    display: grid;
+    gap: 28px;
+    margin-top: 16px;
+  }
+  .card-row.c3 { grid-template-columns: repeat(3, 1fr); }
+  .card-row.c4 { grid-template-columns: repeat(4, 1fr); }
+  .card-row.c2 { grid-template-columns: repeat(2, 1fr); }
+
+  .card {
+    border-top: 4px solid var(--card-color, var(--fg-dim));
+    padding: 24px 0 0;
+  }
+  .card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--card-color, var(--fg));
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: 1.25rem;
+    color: var(--fg-dim);
+    line-height: 1.5;
+  }
+
+  /* ── Timeline (vertical flow for "Today") ── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 20px;
+  }
+  .timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+  }
+  .timeline-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--dot-color, var(--fg-dim));
+  }
+  .timeline-line {
+    width: 2px;
+    height: 20px;
+    margin-left: 7px;
+    background: #333;
+  }
+  .timeline-label {
+    font-size: 1.6rem;
+    font-weight: 500;
+  }
+
+  /* ── Steps (exercise tracker) ── */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .steps li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--section-color, var(--blue));
+    color: #111;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .steps li span {
+    font-size: 1.4rem;
+    line-height: 1.45;
+  }
+  .steps .sub-options {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--fg-dim);
+    margin-top: 6px;
+    padding-left: 0;
+  }
+
+  /* ── Numbered points (non-exercise) ── */
+  .numbered {
+    counter-reset: num;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .numbered li {
+    counter-increment: num;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding-left: 40px;
+    position: relative;
+  }
+  .numbered li::before {
+    content: counter(num) ".";
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: var(--section-color, var(--blue));
+  }
+
+  /* ── Policy blocks ── */
+  .policy-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 16px;
+  }
+  .policy h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .policy p {
+    font-size: 1.35rem;
+    color: var(--fg-dim);
+    line-height: 1.5;
+  }
+
+  /* ── Links ── */
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .resource-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .resource-list li { font-size: 1.35rem; }
+  .resource-list .label { font-weight: 600; color: var(--fg); }
+
+  /* ── Counter ── */
+  .counter {
+    position: fixed;
+    bottom: 20px; right: 28px;
+    font-size: 0.85rem;
+    color: #444;
+    font-variant-numeric: tabular-nums;
+    z-index: 100;
+  }
+
+  /* ── Utility ── */
+  .mt { margin-top: 20px; }
+  .mt-lg { margin-top: 36px; }
+  .accent { color: var(--amber); }
+  .accent-blue { color: var(--blue); }
+  .accent-violet { color: var(--violet); }
+  .accent-green { color: var(--green); }
+
+  /* ── Arrow diagram ── */
+  .arrow-flow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  .arrow-flow .box {
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+  }
+  .arrow-flow .arrow {
+    font-size: 1.8rem;
+    color: var(--fg-dim);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1200px) {
+    :root { --pad: 48px; }
+    .billboard h1 { font-size: 3rem; }
+    .divider h1 { font-size: 3.2rem; }
+    .card-row.c4 { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ═══ 1. WARM-UP (amber section) ═══ -->
+  <section class="slide content active" style="--section-color: var(--amber); background: var(--amber-bg);">
+    <h2 style="font-size: 3.2rem;">Competitive Insight Share</h2>
+    <p class="big-text mt" style="color: var(--fg-dim);">Find a partner (someone NOT in your problem space)</p>
+    <ol class="steps mt" style="--section-color: var(--amber);">
+      <li><span>Each person shares (3 min each):<span class="sub-options">"The one insight from my competitive analysis that will most influence my design is..."<br>"My app will be different because..."</span></span></li>
+      <li><span>Partner asks one probing question</span></li>
+      <li><span>Switch and repeat</span></li>
+    </ol>
+    <p class="callout accent mt-lg">Goal: Articulate your differentiation out loud — it makes it clearer in your own head.</p>
+  </section>
+
+  <!-- ═══ 2. PRAYER ═══ -->
+  <section class="slide billboard" style="--section-color: var(--amber);">
+    <h1>Prayer</h1>
+    <p class="sub">Annika, will you pray for us today?</p>
+  </section>
+
+  <!-- ═══ 3. TITLE ═══ -->
+  <section class="slide billboard">
+    <h1 style="font-size: 4.8rem;">Unit D: Neue App</h1>
+    <p class="sub" style="font-size: 1.8rem; max-width: 700px;">Research becomes action when you translate insights into sketches</p>
+  </section>
+
+  <!-- ═══ 4. TODAY (timeline) ═══ -->
+  <section class="slide content" style="padding-left: 160px;">
+    <h2>Today</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--amber);"></div><span class="timeline-label">Competitive Insight Share</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--blue);"></div><span class="timeline-label">From Analysis to Action</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--violet);"></div><span class="timeline-label">User Flow Fundamentals</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--green);"></div><span class="timeline-label">Paper Prototyping</span></div>
+      <div class="timeline-line"></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--fg-dim);"></div><span class="timeline-label">Work Session — D4</span></div>
+    </div>
+  </section>
+
+  <!-- ═══ 5. BY THE END OF TODAY ═══ -->
+  <section class="slide top">
+    <h2>By the end of today...</h2>
+    <div class="card-row c3 mt">
+      <div class="card" style="--card-color: var(--blue);">
+        <h3>Differentiation</h3>
+        <p>You'll articulate what makes your app different from competitors, grounded in your D3 research</p>
+      </div>
+      <div class="card" style="--card-color: var(--violet);">
+        <h3>User Flows</h3>
+        <p>You'll know how to map your app's core experience in 3-4 screens (not counting onboarding)</p>
+      </div>
+      <div class="card" style="--card-color: var(--green);">
+        <h3>Paper Prototyping</h3>
+        <p>You'll understand what makes a paper prototype "testable" and start sketching yours</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 6. WHY THIS MATTERS ═══ -->
+  <section class="slide content" style="--section-color: var(--amber); background: var(--amber-bg);">
+    <h2 style="color: var(--amber);">Why this matters</h2>
+    <p class="big-text">Research without action is just homework.</p>
+    <p class="big-text">Paper prototypes feel primitive, but they're the fastest way to test ideas before investing hours in Figma.</p>
+    <p class="callout accent mt">The user flows you create today become the blueprint for AI prototyping later — clearer flows = better AI output.</p>
+  </section>
+
+  <!-- ═══ 7. THE PIVOT POINT ═══ -->
+  <section class="slide billboard" style="--section-color: var(--violet);">
+    <p class="small" style="font-size: 1.4rem; margin-bottom: 24px;">Today marks the shift</p>
+    <h1 style="max-width: 1000px; font-size: 3.8rem;">Forming Intent → Rendering Intent</h1>
+    <div class="policy-pair mt-lg" style="max-width: 800px; text-align: left;">
+      <div class="policy">
+        <h3 style="color: var(--fg-dim);">Forming</h3>
+        <p>Research, validation, competitive analysis</p>
+      </div>
+      <div class="policy">
+        <h3 style="color: var(--violet);">Rendering</h3>
+        <p>User flows, prototypes, screens</p>
+      </div>
+    </div>
+    <p class="callout accent-violet mt-lg" style="font-size: 1.6rem;">Your user flow is the bridge between these two.</p>
+  </section>
+
+  <!-- ═══ 8. SECTION DIVIDER: From Analysis to Action ═══ -->
+  <section class="slide divider" style="--section-bg: var(--blue-bg);">
+    <h1 style="color: var(--blue);">From Analysis to Action</h1>
+    <p class="sub">Turning competitive insights into your unique position</p>
+  </section>
+
+  <!-- ═══ 9. THE "SO WHAT?" QUESTION ═══ -->
+  <section class="slide content" style="--section-color: var(--blue);">
+    <h2>The "So What?" Question</h2>
+    <p class="big-text">You have a positioning matrix and four competitor analyses — now what?</p>
+    <p class="callout mt">Every competitive insight should answer:</p>
+    <p class="big-text accent-blue mt">"So what does this mean for MY design?"</p>
+    <div class="arrow-flow mt-lg">
+      <div class="box">"All four competitors have cluttered dashboards"</div>
+      <span class="arrow">→</span>
+      <div class="box" style="color: var(--blue);">"My app will have a focused, single-task home screen"</div>
+    </div>
+  </section>
+
+  <!-- ═══ 10. FINDING YOUR GAP ═══ -->
+  <section class="slide content" style="--section-color: var(--blue);">
+    <h2>Finding Your Gap</h2>
+    <ol class="numbered mt" style="--section-color: var(--blue);">
+      <li>Look at your positioning matrix — where is the <strong>empty space</strong>?</li>
+      <li>Look at competitor weaknesses — what pain points can you solve <strong>better</strong>?</li>
+    </ol>
+    <p class="big-text mt-lg">Differentiation = <span class="accent-blue">gap in the market</span> + <span class="accent">something you can actually execute</span></p>
+    <p class="callout accent-blue mt-lg">Let's look at a positioning matrix together. Where's the opportunity?</p>
+  </section>
+
+  <!-- ═══ 11. SECTION DIVIDER: User Flows ═══ -->
+  <section class="slide divider" style="--section-bg: var(--violet-bg);">
+    <h1 style="color: var(--violet);">User Flow Fundamentals</h1>
+    <p class="sub">Mapping the experience, not the features</p>
+  </section>
+
+  <!-- ═══ 12. WHAT IS A USER FLOW? ═══ -->
+  <section class="slide content" style="--section-color: var(--violet);">
+    <h2>User flow ≠ feature list</h2>
+    <p class="big-text">A user flow maps <em>how someone moves through your app</em> to accomplish a goal.</p>
+    <div class="arrow-flow mt-lg" style="flex-wrap: wrap; justify-content: flex-start;">
+      <div class="box" style="background: var(--violet); color: #111;">Entry point</div>
+      <span class="arrow">→</span>
+      <div class="box">Core screens (3-4)</div>
+      <span class="arrow">→</span>
+      <div class="box">Decision points</div>
+      <span class="arrow">→</span>
+      <div class="box" style="background: var(--green); color: #111;">Success state</div>
+    </div>
+    <p class="callout mt-lg">Start with the "happy path" — the ideal case where everything works. Edge cases come later.</p>
+  </section>
+
+  <!-- ═══ 13. USER FLOWS GUIDE AI ═══ -->
+  <section class="slide content" style="--section-color: var(--violet);">
+    <h2>Your flow is a prompt</h2>
+    <p class="big-text">Later in Unit D, you'll use AI tools to translate paper sketches to digital.</p>
+    <div class="policy-pair mt">
+      <div class="policy">
+        <h3 style="color: var(--red);">Messy flow</h3>
+        <p>= messy AI output</p>
+      </div>
+      <div class="policy">
+        <h3 style="color: var(--green);">Clear, annotated flow</h3>
+        <p>= useful AI output</p>
+      </div>
+    </div>
+    <p class="callout accent-violet mt-lg">Think of your user flow as the prompt for future AI collaboration.</p>
+  </section>
+
+  <!-- ═══ 14. SECTION DIVIDER: Paper Prototyping ═══ -->
+  <section class="slide divider" style="--section-bg: var(--green-bg);">
+    <h1 style="color: var(--green);">Paper Prototyping</h1>
+    <p class="sub">Why sketch before you commit to pixels</p>
+  </section>
+
+  <!-- ═══ 15. WHY PAPER BEFORE DIGITAL? ═══ -->
+  <section class="slide content" style="--section-color: var(--green);">
+    <h2>Speed enables iteration</h2>
+    <ol class="numbered mt" style="--section-color: var(--green);">
+      <li><strong>Paper is fast</strong> — you can sketch 10 screens in the time it takes to make 1 in Figma</li>
+      <li><strong>Paper invites feedback</strong> — people critique pixels, but they help improve sketches</li>
+      <li><strong>Paper prevents attachment</strong> — you'll iterate more if you haven't invested hours</li>
+    </ol>
+    <p class="callout accent-green mt-lg">The goal isn't beautiful sketches — it's fast learning.</p>
+  </section>
+
+  <!-- ═══ 16. WHAT MAKES A PROTOTYPE TESTABLE? ═══ -->
+  <section class="slide top" style="--section-color: var(--green);">
+    <h2>What makes a prototype "testable"?</h2>
+    <div class="card-row c2 mt">
+      <div class="card" style="--card-color: var(--green);">
+        <h3>To Scale</h3>
+        <p>Sketch at actual phone size — index cards work great (3x5")</p>
+      </div>
+      <div class="card" style="--card-color: var(--green);">
+        <h3>Realistic Content</h3>
+        <p>Real text, not "lorem ipsum" — fake content hides problems</p>
+      </div>
+      <div class="card" style="--card-color: var(--green);">
+        <h3>Detailed Enough to Use</h3>
+        <p>Someone should be able to "tap" through your prototype</p>
+      </div>
+      <div class="card" style="--card-color: var(--green);">
+        <h3>Clear Tap Targets</h3>
+        <p>Where would someone actually touch?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 17. D4 ASSIGNMENT ═══ -->
+  <section class="slide content" style="--section-color: var(--fg-dim);">
+    <h2>D4: User Flow + Paper Prototype</h2>
+    <p class="small">Due Wednesday, Mar 11 @ 5:15pm &nbsp;·&nbsp; Submit to Learning Suite</p>
+    <div class="policy-pair mt">
+      <div class="policy">
+        <h3 style="color: var(--violet);">User Flow Diagram</h3>
+        <p>Core function in 3-4 screens (+ onboarding)</p>
+        <p>Entry point → main screens → decision points → success state</p>
+        <p>Annotations explaining each step</p>
+      </div>
+      <div class="policy">
+        <h3 style="color: var(--green);">Paper Prototype</h3>
+        <p>5-6 screens for main feature</p>
+        <p>3-4 screens for secondary features</p>
+        <p>To scale (actual phone size)</p>
+        <p style="color: var(--amber); margin-top: 8px;"><strong>Bring to class Wednesday — you'll test it</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 18. NEXT UP ═══ -->
+  <section class="slide top" style="--section-color: var(--fg-dim); background: linear-gradient(135deg, #161616 0%, #111 100%);">
+    <h2>Next up</h2>
+    <div class="mt" style="display: flex; flex-direction: column; gap: 24px;">
+      <div>
+        <p><strong>Work session</strong> (65 min)</p>
+        <ul class="resource-list" style="margin-top: 12px;">
+          <li><span class="label">First 15 min:</span> Write your differentiation strategy (2-3 sentences)</li>
+          <li><span class="label">Next 20 min:</span> Create your user flow diagram — map entry → 3-4 screens → success</li>
+          <li><span class="label">Remaining 30 min:</span> Begin paper prototyping — start with your main feature flow</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>D4: User Flow + Paper Prototype</strong> — due Wed, Mar 11 @ 5:15pm</p>
+        <p style="color: var(--fg-dim); font-size: 1.3rem; margin-top: 8px;">Bring paper prototype to class — you'll test it on Day 18</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="counter"><span id="cur">1</span> / <span id="tot"></span></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  document.getElementById('tot').textContent = total;
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    document.getElementById('cur').textContent = current + 1;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  document.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    e.clientX / window.innerWidth < 0.33 ? goTo(current - 1) : goTo(current + 1);
+  });
+</script>
+
+</body>
+</html>
