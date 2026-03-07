@@ -20,6 +20,8 @@
     --green: hsl(155, 60%, 50%);
     --green-bg: hsl(155, 35%, 8%);
     --red: hsl(0, 65%, 55%);
+    --cyan: hsl(185, 70%, 50%);
+    --cyan-bg: hsl(185, 40%, 8%);
     --pad: 80px;
   }
 
@@ -47,14 +49,6 @@
     opacity: 1; pointer-events: auto;
     transform: translateX(0);
   }
-  .slide.exit-left {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  .slide.exit-right {
-    opacity: 0;
-    transform: translateX(40px);
-  }
 
   /* ── Keyframes ── */
   @keyframes fadeUp {
@@ -70,18 +64,19 @@
     70%  { transform: scale(1.2); }
     100% { opacity: 1; transform: scale(1); }
   }
-  @keyframes growDown {
-    from { transform: scaleY(0); }
-    to   { transform: scaleY(1); }
-  }
   @keyframes widen {
     from { width: 0; }
     to   { width: 100%; }
   }
+  @keyframes growDown {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
 
-  /* ── Staggered entrance: children of active slides ── */
+  /* ── Staggered entrance ── */
   .slide.active > h1, .slide.active > h2, .slide.active > h3,
-  .slide.active > p, .slide.active > div, .slide.active > ol, .slide.active > ul {
+  .slide.active > p, .slide.active > div, .slide.active > ol, .slide.active > ul,
+  .slide.active > table {
     animation: fadeUp 0.5s ease both;
   }
   .slide.active > :nth-child(1) { animation-delay: 0.08s; }
@@ -91,104 +86,78 @@
   .slide.active > :nth-child(5) { animation-delay: 0.46s; }
   .slide.active > :nth-child(6) { animation-delay: 0.52s; }
 
-  /* Billboard headings: scale entrance */
-  .billboard.active > h1 {
-    animation: scaleUp 0.6s ease both;
-    animation-delay: 0.1s;
-  }
-  .divider.active > h1 {
+  .billboard.active > h1, .divider.active > h1 {
     animation: scaleUp 0.6s ease both;
     animation-delay: 0.1s;
   }
 
-  /* Cards: stagger individually */
-  .slide.active .card {
-    animation: fadeUp 0.45s ease both;
-  }
+  .slide.active .card { animation: fadeUp 0.45s ease both; }
   .slide.active .card:nth-child(1) { animation-delay: 0.2s; }
   .slide.active .card:nth-child(2) { animation-delay: 0.32s; }
   .slide.active .card:nth-child(3) { animation-delay: 0.44s; }
+  .slide.active .card:nth-child(4) { animation-delay: 0.56s; }
 
-  /* Card top-border widen effect */
   .card { border-top-color: transparent; position: relative; }
   .card::after {
     content: "";
     position: absolute; top: -4px; left: 0; height: 4px;
     width: 0;
     background: var(--card-color, var(--fg-dim));
-    transition: none;
   }
-  .slide.active .card::after {
-    animation: widen 0.4s ease both;
-  }
+  .slide.active .card::after { animation: widen 0.4s ease both; }
   .slide.active .card:nth-child(1)::after { animation-delay: 0.35s; }
   .slide.active .card:nth-child(2)::after { animation-delay: 0.47s; }
   .slide.active .card:nth-child(3)::after { animation-delay: 0.59s; }
+  .slide.active .card:nth-child(4)::after { animation-delay: 0.71s; }
 
-  /* Timeline items: stagger with dot pop */
-  .slide.active .timeline-item {
-    animation: fadeUp 0.4s ease both;
-  }
+  .slide.active .timeline-item { animation: fadeUp 0.4s ease both; }
   .slide.active .timeline-item:nth-child(1)  { animation-delay: 0.15s; }
-  .slide.active .timeline-line:nth-child(2)   { animation: fadeUp 0.3s ease both; animation-delay: 0.3s; }
+  .slide.active .timeline-line:nth-child(2)  { animation: fadeUp 0.3s ease both; animation-delay: 0.3s; }
   .slide.active .timeline-item:nth-child(3)  { animation-delay: 0.4s; }
-  .slide.active .timeline-line:nth-child(4)   { animation: fadeUp 0.3s ease both; animation-delay: 0.55s; }
+  .slide.active .timeline-line:nth-child(4)  { animation: fadeUp 0.3s ease both; animation-delay: 0.55s; }
   .slide.active .timeline-item:nth-child(5)  { animation-delay: 0.65s; }
-  .slide.active .timeline-line:nth-child(6)   { animation: fadeUp 0.3s ease both; animation-delay: 0.8s; }
+  .slide.active .timeline-line:nth-child(6)  { animation: fadeUp 0.3s ease both; animation-delay: 0.8s; }
   .slide.active .timeline-item:nth-child(7)  { animation-delay: 0.9s; }
-  .slide.active .timeline-line:nth-child(8)   { animation: fadeUp 0.3s ease both; animation-delay: 1.05s; }
+  .slide.active .timeline-line:nth-child(8)  { animation: fadeUp 0.3s ease both; animation-delay: 1.05s; }
   .slide.active .timeline-item:nth-child(9)  { animation-delay: 1.15s; }
 
-  .slide.active .timeline-dot {
-    animation: popIn 0.4s ease both;
-  }
+  .slide.active .timeline-dot { animation: popIn 0.4s ease both; }
   .slide.active .timeline-item:nth-child(1) .timeline-dot { animation-delay: 0.2s; }
   .slide.active .timeline-item:nth-child(3) .timeline-dot { animation-delay: 0.45s; }
   .slide.active .timeline-item:nth-child(5) .timeline-dot { animation-delay: 0.7s; }
   .slide.active .timeline-item:nth-child(7) .timeline-dot { animation-delay: 0.95s; }
   .slide.active .timeline-item:nth-child(9) .timeline-dot { animation-delay: 1.2s; }
 
-  /* Steps: stagger with circle pop */
-  .slide.active .steps li {
-    animation: fadeUp 0.4s ease both;
-  }
+  .slide.active .steps li { animation: fadeUp 0.4s ease both; }
   .slide.active .steps li:nth-child(1) { animation-delay: 0.2s; }
   .slide.active .steps li:nth-child(2) { animation-delay: 0.35s; }
   .slide.active .steps li:nth-child(3) { animation-delay: 0.5s; }
   .slide.active .steps li:nth-child(4) { animation-delay: 0.65s; }
   .slide.active .steps li:nth-child(5) { animation-delay: 0.8s; }
 
-  /* Numbered list stagger */
-  .slide.active .numbered li {
-    animation: fadeUp 0.4s ease both;
-  }
+  .slide.active .numbered li { animation: fadeUp 0.4s ease both; }
   .slide.active .numbered li:nth-child(1) { animation-delay: 0.2s; }
   .slide.active .numbered li:nth-child(2) { animation-delay: 0.32s; }
   .slide.active .numbered li:nth-child(3) { animation-delay: 0.44s; }
   .slide.active .numbered li:nth-child(4) { animation-delay: 0.56s; }
 
-  /* Policy pair stagger */
   .slide.active .policy:nth-child(1) { animation: fadeUp 0.45s ease both; animation-delay: 0.2s; }
   .slide.active .policy:nth-child(2) { animation: fadeUp 0.45s ease both; animation-delay: 0.38s; }
 
-  /* Section bar: grow from top */
   .slide.active::before {
     transform-origin: top;
     animation: growDown 0.4s ease both;
     animation-delay: 0s;
   }
 
-  /* Resource list stagger */
-  .slide.active .resource-list li {
-    animation: fadeUp 0.35s ease both;
-  }
+  .slide.active .resource-list li { animation: fadeUp 0.35s ease both; }
   .slide.active .resource-list li:nth-child(1) { animation-delay: 0.12s; }
   .slide.active .resource-list li:nth-child(2) { animation-delay: 0.2s; }
   .slide.active .resource-list li:nth-child(3) { animation-delay: 0.28s; }
   .slide.active .resource-list li:nth-child(4) { animation-delay: 0.36s; }
   .slide.active .resource-list li:nth-child(5) { animation-delay: 0.44s; }
 
-  /* ── Section bar (left edge color indicator) ── */
+  /* ── Section bar ── */
   .slide::before {
     content: "";
     position: absolute; left: 0; top: 0; bottom: 0;
@@ -196,7 +165,7 @@
     background: var(--section-color, transparent);
   }
 
-  /* ── Layout: Billboard (centered single statement) ── */
+  /* ── Layout: Billboard ── */
   .billboard {
     flex-direction: column;
     align-items: center;
@@ -219,7 +188,7 @@
     line-height: 1.5;
   }
 
-  /* ── Layout: Section Divider (color wash) ── */
+  /* ── Layout: Divider ── */
   .divider {
     flex-direction: column;
     align-items: center;
@@ -242,7 +211,7 @@
     font-weight: 400;
   }
 
-  /* ── Layout: Content (left-aligned, vertically centered) ── */
+  /* ── Layout: Content ── */
   .content {
     flex-direction: column;
     justify-content: center;
@@ -257,27 +226,7 @@
     letter-spacing: -0.02em;
   }
 
-  /* ── Layout: Split (left label + right content) ── */
-  .split {
-    align-items: center;
-    padding: var(--pad);
-    padding-left: calc(var(--pad) + 20px);
-    gap: 60px;
-  }
-  .split .left {
-    flex: 0 0 35%;
-  }
-  .split .left h1 {
-    font-size: 3.2rem;
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-  .split .right {
-    flex: 1;
-  }
-
-  /* ── Layout: Top-aligned (cards, grids) ── */
+  /* ── Layout: Top ── */
   .top {
     flex-direction: column;
     padding: var(--pad);
@@ -293,30 +242,15 @@
 
   /* ── Typography ── */
   p, li { font-size: 1.5rem; line-height: 1.55; }
-
-  .big-text {
-    font-size: 2.2rem;
-    font-weight: 600;
-    line-height: 1.35;
-  }
-
-  .callout {
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.45;
-  }
-
+  .big-text { font-size: 2.2rem; font-weight: 600; line-height: 1.35; }
+  .callout { font-size: 1.5rem; font-weight: 600; line-height: 1.45; }
   .small { font-size: 1.25rem; color: var(--fg-dim); }
 
   /* ── Cards ── */
-  .card-row {
-    display: grid;
-    gap: 28px;
-    margin-top: 16px;
-  }
+  .card-row { display: grid; gap: 28px; margin-top: 16px; }
+  .card-row.c2 { grid-template-columns: repeat(2, 1fr); }
   .card-row.c3 { grid-template-columns: repeat(3, 1fr); }
   .card-row.c4 { grid-template-columns: repeat(4, 1fr); }
-  .card-row.c2 { grid-template-columns: repeat(2, 1fr); }
 
   .card {
     border-top: 4px solid var(--card-color, var(--fg-dim));
@@ -334,139 +268,55 @@
     line-height: 1.5;
   }
 
-  /* ── Timeline (vertical flow for "Today") ── */
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-top: 20px;
-  }
-  .timeline-item {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 16px 0;
-  }
-  .timeline-dot {
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background: var(--dot-color, var(--fg-dim));
-  }
-  .timeline-line {
-    width: 2px;
-    height: 20px;
-    margin-left: 7px;
-    background: #333;
-  }
-  .timeline-label {
-    font-size: 1.6rem;
-    font-weight: 500;
-  }
+  /* ── Timeline ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; margin-top: 20px; }
+  .timeline-item { display: flex; align-items: center; gap: 20px; padding: 16px 0; }
+  .timeline-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; background: var(--dot-color, var(--fg-dim)); }
+  .timeline-line { width: 2px; height: 20px; margin-left: 7px; background: #333; }
+  .timeline-label { font-size: 1.6rem; font-weight: 500; }
 
-  /* ── Steps (exercise tracker) ── */
-  .steps {
-    counter-reset: step;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .steps li {
-    counter-increment: step;
-    display: flex;
-    gap: 16px;
-    align-items: baseline;
-  }
+  /* ── Steps ── */
+  .steps { counter-reset: step; list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .steps li { counter-increment: step; display: flex; gap: 16px; align-items: baseline; }
   .steps li::before {
     content: counter(step);
-    flex-shrink: 0;
-    width: 36px; height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-shrink: 0; width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
     border-radius: 50%;
     background: var(--section-color, var(--blue));
-    color: #111;
-    font-weight: 700;
-    font-size: 1.1rem;
+    color: #111; font-weight: 700; font-size: 1.1rem;
   }
-  .steps li span {
-    font-size: 1.4rem;
-    line-height: 1.45;
-  }
-  .steps .sub-options {
-    display: block;
-    font-size: 1.2rem;
-    color: var(--fg-dim);
-    margin-top: 6px;
-    padding-left: 0;
-  }
+  .steps li span { font-size: 1.4rem; line-height: 1.45; }
+  .steps .sub-options { display: block; font-size: 1.2rem; color: var(--fg-dim); margin-top: 6px; }
 
-  /* ── Numbered points (non-exercise) ── */
-  .numbered {
-    counter-reset: num;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .numbered li {
-    counter-increment: num;
-    font-size: 1.5rem;
-    line-height: 1.5;
-    padding-left: 40px;
-    position: relative;
-  }
-  .numbered li::before {
-    content: counter(num) ".";
-    position: absolute;
-    left: 0;
-    font-weight: 700;
-    color: var(--section-color, var(--blue));
-  }
+  /* ── Numbered ── */
+  .numbered { counter-reset: num; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .numbered li { counter-increment: num; font-size: 1.5rem; line-height: 1.5; padding-left: 40px; position: relative; }
+  .numbered li::before { content: counter(num) "."; position: absolute; left: 0; font-weight: 700; color: var(--section-color, var(--blue)); }
 
   /* ── Policy blocks ── */
-  .policy-pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    margin-top: 16px;
-  }
-  .policy h3 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .policy p {
-    font-size: 1.35rem;
-    color: var(--fg-dim);
-    line-height: 1.5;
-  }
+  .policy-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 16px; }
+  .policy h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+  .policy p { font-size: 1.35rem; color: var(--fg-dim); line-height: 1.5; }
 
-  /* ── Links ── */
-  a { color: var(--blue); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  /* ── Table ── */
+  table { border-collapse: collapse; margin-top: 20px; }
+  th, td { padding: 16px 24px; text-align: left; font-size: 1.3rem; border-bottom: 1px solid #333; }
+  th { color: var(--fg-dim); font-weight: 600; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td:first-child { font-weight: 700; color: var(--cyan); }
 
-  .resource-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 12px;
-  }
+  /* ── Arrow flow ── */
+  .arrow-flow { display: flex; align-items: center; gap: 16px; margin-top: 24px; font-size: 1.4rem; font-weight: 600; flex-wrap: wrap; }
+  .arrow-flow .box { padding: 16px 24px; background: rgba(255,255,255,0.05); border-radius: 8px; }
+  .arrow-flow .arrow { font-size: 1.8rem; color: var(--fg-dim); }
+
+  /* ── Resource list ── */
+  .resource-list { list-style: none; display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
   .resource-list li { font-size: 1.35rem; }
   .resource-list .label { font-weight: 600; color: var(--fg); }
 
   /* ── Counter ── */
-  .counter {
-    position: fixed;
-    bottom: 20px; right: 28px;
-    font-size: 0.85rem;
-    color: #444;
-    font-variant-numeric: tabular-nums;
-    z-index: 100;
-  }
+  .counter { position: fixed; bottom: 20px; right: 28px; font-size: 0.85rem; color: #444; font-variant-numeric: tabular-nums; z-index: 100; }
 
   /* ── Utility ── */
   .mt { margin-top: 20px; }
@@ -475,27 +325,11 @@
   .accent-blue { color: var(--blue); }
   .accent-violet { color: var(--violet); }
   .accent-green { color: var(--green); }
+  .accent-cyan { color: var(--cyan); }
 
-  /* ── Arrow diagram ── */
-  .arrow-flow {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 24px;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
-  .arrow-flow .box {
-    padding: 16px 24px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 8px;
-  }
-  .arrow-flow .arrow {
-    font-size: 1.8rem;
-    color: var(--fg-dim);
-  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-  /* ── Responsive ── */
   @media (max-width: 1200px) {
     :root { --pad: 48px; }
     .billboard h1 { font-size: 3rem; }
@@ -508,7 +342,7 @@
 
 <div class="deck">
 
-  <!-- ═══ 1. WARM-UP (amber section) ═══ -->
+  <!-- ═══ 1. WARM-UP ═══ -->
   <section class="slide content active" style="--section-color: var(--amber); background: var(--amber-bg);">
     <h2 style="font-size: 3.2rem;">Competitive Insight Share</h2>
     <p class="big-text mt" style="color: var(--fg-dim);">Find a partner (someone NOT in your problem space)</p>
@@ -517,7 +351,6 @@
       <li><span>Partner asks one probing question</span></li>
       <li><span>Switch and repeat</span></li>
     </ol>
-    <p class="callout accent mt-lg">Goal: Articulate your differentiation out loud — it makes it clearer in your own head.</p>
   </section>
 
   <!-- ═══ 2. PRAYER ═══ -->
@@ -529,22 +362,22 @@
   <!-- ═══ 3. TITLE ═══ -->
   <section class="slide billboard">
     <h1 style="font-size: 4.8rem;">Unit D: Neue App</h1>
-    <p class="sub" style="font-size: 1.8rem; max-width: 700px;">Research becomes action when you translate insights into sketches</p>
+    <p class="sub" style="font-size: 1.8rem; max-width: 750px;">Your user flow is a prompt — AI turns your thinking into working code</p>
   </section>
 
-  <!-- ═══ 4. TODAY (timeline) ═══ -->
+  <!-- ═══ 4. TODAY ═══ -->
   <section class="slide content" style="padding-left: 160px;">
     <h2>Today</h2>
     <div class="timeline">
       <div class="timeline-item"><div class="timeline-dot" style="background: var(--amber);"></div><span class="timeline-label">Competitive Insight Share</span></div>
       <div class="timeline-line"></div>
-      <div class="timeline-item"><div class="timeline-dot" style="background: var(--blue);"></div><span class="timeline-label">From Analysis to Action</span></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--blue);"></div><span class="timeline-label">Synthesis → Differentiation</span></div>
       <div class="timeline-line"></div>
-      <div class="timeline-item"><div class="timeline-dot" style="background: var(--violet);"></div><span class="timeline-label">User Flow Fundamentals</span></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--violet);"></div><span class="timeline-label">User Flow as AI Prompt</span></div>
       <div class="timeline-line"></div>
-      <div class="timeline-item"><div class="timeline-dot" style="background: var(--green);"></div><span class="timeline-label">Paper Prototyping</span></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--cyan);"></div><span class="timeline-label">Quick Sketches + AI Prototyping</span></div>
       <div class="timeline-line"></div>
-      <div class="timeline-item"><div class="timeline-dot" style="background: var(--fg-dim);"></div><span class="timeline-label">Work Session — D4</span></div>
+      <div class="timeline-item"><div class="timeline-dot" style="background: var(--fg-dim);"></div><span class="timeline-label">Work Session — Build Your Prototype</span></div>
     </div>
   </section>
 
@@ -554,15 +387,15 @@
     <div class="card-row c3 mt">
       <div class="card" style="--card-color: var(--blue);">
         <h3>Differentiation</h3>
-        <p>You'll articulate what makes your app different from competitors, grounded in your D3 research</p>
+        <p>You'll articulate what makes your app different, grounded in your D3 research</p>
       </div>
       <div class="card" style="--card-color: var(--violet);">
         <h3>User Flows</h3>
-        <p>You'll know how to map your app's core experience in 3-4 screens (not counting onboarding)</p>
+        <p>You'll create a user flow that doubles as an effective AI prompt</p>
       </div>
-      <div class="card" style="--card-color: var(--green);">
-        <h3>Paper Prototyping</h3>
-        <p>You'll understand what makes a paper prototype "testable" and start sketching yours</p>
+      <div class="card" style="--card-color: var(--cyan);">
+        <h3>AI Prototyping</h3>
+        <p>You'll generate a working coded prototype using V0, Lovable, or similar tools</p>
       </div>
     </div>
   </section>
@@ -570,9 +403,9 @@
   <!-- ═══ 6. WHY THIS MATTERS ═══ -->
   <section class="slide content" style="--section-color: var(--amber); background: var(--amber-bg);">
     <h2 style="color: var(--amber);">Why this matters</h2>
-    <p class="big-text">Research without action is just homework.</p>
-    <p class="big-text">Paper prototypes feel primitive, but they're the fastest way to test ideas before investing hours in Figma.</p>
-    <p class="callout accent mt">The user flows you create today become the blueprint for AI prototyping later — clearer flows = better AI output.</p>
+    <p class="big-text">You've done the research. Today your app comes to life.</p>
+    <p class="big-text">AI tools can turn your user flows and sketches into working code in minutes — but only if you give them clear inputs.</p>
+    <p class="callout accent mt">Your flow is your prompt. The clearer your thinking, the better the output.</p>
   </section>
 
   <!-- ═══ 7. THE PIVOT POINT ═══ -->
@@ -586,16 +419,16 @@
       </div>
       <div class="policy">
         <h3 style="color: var(--violet);">Rendering</h3>
-        <p>User flows, prototypes, screens</p>
+        <p>User flows, prototypes, working code</p>
       </div>
     </div>
-    <p class="callout accent-violet mt-lg" style="font-size: 1.6rem;">Your user flow is the bridge between these two.</p>
+    <p class="callout accent-violet mt-lg" style="font-size: 1.6rem;">Your user flow is the bridge. AI accelerates the rendering.</p>
   </section>
 
-  <!-- ═══ 8. SECTION DIVIDER: From Analysis to Action ═══ -->
+  <!-- ═══ 8. SECTION: SYNTHESIS ═══ -->
   <section class="slide divider" style="--section-bg: var(--blue-bg);">
-    <h1 style="color: var(--blue);">From Analysis to Action</h1>
-    <p class="sub">Turning competitive insights into your unique position</p>
+    <h1 style="color: var(--blue);">From Research to Prototype</h1>
+    <p class="sub">Competitive insights → User flow → Sketches → Working code</p>
   </section>
 
   <!-- ═══ 9. THE "SO WHAT?" QUESTION ═══ -->
@@ -618,21 +451,20 @@
       <li>Look at your positioning matrix — where is the <strong>empty space</strong>?</li>
       <li>Look at competitor weaknesses — what pain points can you solve <strong>better</strong>?</li>
     </ol>
-    <p class="big-text mt-lg">Differentiation = <span class="accent-blue">gap in the market</span> + <span class="accent">something you can actually execute</span></p>
-    <p class="callout accent-blue mt-lg">Let's look at a positioning matrix together. Where's the opportunity?</p>
+    <p class="big-text mt-lg">Differentiation = <span class="accent-blue">gap in the market</span> + <span class="accent">something you can execute</span></p>
   </section>
 
-  <!-- ═══ 11. SECTION DIVIDER: User Flows ═══ -->
+  <!-- ═══ 11. SECTION: USER FLOW ═══ -->
   <section class="slide divider" style="--section-bg: var(--violet-bg);">
-    <h1 style="color: var(--violet);">User Flow Fundamentals</h1>
-    <p class="sub">Mapping the experience, not the features</p>
+    <h1 style="color: var(--violet);">User Flow as AI Prompt</h1>
+    <p class="sub">The clearer your flow, the better the output</p>
   </section>
 
   <!-- ═══ 12. WHAT IS A USER FLOW? ═══ -->
   <section class="slide content" style="--section-color: var(--violet);">
     <h2>User flow ≠ feature list</h2>
     <p class="big-text">A user flow maps <em>how someone moves through your app</em> to accomplish a goal.</p>
-    <div class="arrow-flow mt-lg" style="flex-wrap: wrap; justify-content: flex-start;">
+    <div class="arrow-flow mt-lg">
       <div class="box" style="background: var(--violet); color: #111;">Entry point</div>
       <span class="arrow">→</span>
       <div class="box">Core screens (3-4)</div>
@@ -641,102 +473,121 @@
       <span class="arrow">→</span>
       <div class="box" style="background: var(--green); color: #111;">Success state</div>
     </div>
-    <p class="callout mt-lg">Start with the "happy path" — the ideal case where everything works. Edge cases come later.</p>
+    <p class="callout mt-lg">Start with the "happy path" — the ideal case where everything works.</p>
   </section>
 
-  <!-- ═══ 13. USER FLOWS GUIDE AI ═══ -->
+  <!-- ═══ 13. YOUR FLOW IS YOUR PROMPT ═══ -->
   <section class="slide content" style="--section-color: var(--violet);">
-    <h2>Your flow is a prompt</h2>
-    <p class="big-text">Later in Unit D, you'll use AI tools to translate paper sketches to digital.</p>
+    <h2>Your flow is your prompt</h2>
+    <p class="big-text">AI needs to understand your intent. A clear, annotated user flow tells AI: "Here's what I want the user to experience."</p>
     <div class="policy-pair mt">
       <div class="policy">
         <h3 style="color: var(--red);">Messy flow</h3>
         <p>= messy AI output</p>
       </div>
       <div class="policy">
-        <h3 style="color: var(--green);">Clear, annotated flow</h3>
+        <h3 style="color: var(--green);">Clear flow</h3>
         <p>= useful AI output</p>
       </div>
     </div>
-    <p class="callout accent-violet mt-lg">Think of your user flow as the prompt for future AI collaboration.</p>
   </section>
 
-  <!-- ═══ 14. SECTION DIVIDER: Paper Prototyping ═══ -->
-  <section class="slide divider" style="--section-bg: var(--green-bg);">
-    <h1 style="color: var(--green);">Paper Prototyping</h1>
-    <p class="sub">Why sketch before you commit to pixels</p>
-  </section>
-
-  <!-- ═══ 15. WHY PAPER BEFORE DIGITAL? ═══ -->
-  <section class="slide content" style="--section-color: var(--green);">
-    <h2>Speed enables iteration</h2>
-    <ol class="numbered mt" style="--section-color: var(--green);">
-      <li><strong>Paper is fast</strong> — you can sketch 10 screens in the time it takes to make 1 in Figma</li>
-      <li><strong>Paper invites feedback</strong> — people critique pixels, but they help improve sketches</li>
-      <li><strong>Paper prevents attachment</strong> — you'll iterate more if you haven't invested hours</li>
+  <!-- ═══ 14. WHAT MAKES A GOOD FLOW FOR AI? ═══ -->
+  <section class="slide content" style="--section-color: var(--violet);">
+    <h2>What makes a good user flow for AI?</h2>
+    <ol class="numbered mt" style="--section-color: var(--violet);">
+      <li><strong>Specific screen names:</strong> "Home Dashboard" not "Screen 1"</li>
+      <li><strong>Clear actions:</strong> "User taps 'Start Workout'" not "User proceeds"</li>
+      <li><strong>Annotations:</strong> What each screen shows and does</li>
+      <li><strong>Success criteria:</strong> What does "done" look like?</li>
     </ol>
-    <p class="callout accent-green mt-lg">The goal isn't beautiful sketches — it's fast learning.</p>
   </section>
 
-  <!-- ═══ 16. WHAT MAKES A PROTOTYPE TESTABLE? ═══ -->
-  <section class="slide top" style="--section-color: var(--green);">
-    <h2>What makes a prototype "testable"?</h2>
-    <div class="card-row c2 mt">
-      <div class="card" style="--card-color: var(--green);">
-        <h3>To Scale</h3>
-        <p>Sketch at actual phone size — index cards work great (3x5")</p>
-      </div>
-      <div class="card" style="--card-color: var(--green);">
-        <h3>Realistic Content</h3>
-        <p>Real text, not "lorem ipsum" — fake content hides problems</p>
-      </div>
-      <div class="card" style="--card-color: var(--green);">
-        <h3>Detailed Enough to Use</h3>
-        <p>Someone should be able to "tap" through your prototype</p>
-      </div>
-      <div class="card" style="--card-color: var(--green);">
-        <h3>Clear Tap Targets</h3>
-        <p>Where would someone actually touch?</p>
-      </div>
-    </div>
+  <!-- ═══ 15. SECTION: AI PROTOTYPING ═══ -->
+  <section class="slide divider" style="--section-bg: var(--cyan-bg);">
+    <h1 style="color: var(--cyan);">Quick Sketches + AI Prototyping</h1>
+    <p class="sub">See your app as working code</p>
   </section>
 
-  <!-- ═══ 17. D4 ASSIGNMENT ═══ -->
-  <section class="slide content" style="--section-color: var(--fg-dim);">
-    <h2>D4: User Flow + Paper Prototype</h2>
-    <p class="small">Due Wednesday, Mar 11 @ 5:15pm &nbsp;·&nbsp; Submit to Learning Suite</p>
-    <div class="policy-pair mt">
-      <div class="policy">
-        <h3 style="color: var(--violet);">User Flow Diagram</h3>
+  <!-- ═══ 16. SKETCHES AS THINKING TOOLS ═══ -->
+  <section class="slide content" style="--section-color: var(--cyan);">
+    <h2>Sketches as thinking tools</h2>
+    <p class="big-text">You're not creating art — you're creating AI input.</p>
+    <p class="callout mt">Quick paper sketches (15-20 min) help you think through layout and hierarchy.</p>
+    <ol class="numbered mt" style="--section-color: var(--cyan);">
+      <li>Phone scale (index cards work great)</li>
+      <li>Real content — not "lorem ipsum"</li>
+      <li>Tap targets marked</li>
+      <li>Visual hierarchy visible</li>
+    </ol>
+    <p class="callout accent-cyan mt-lg">Sketches + user flow = your AI prompt</p>
+  </section>
+
+  <!-- ═══ 17. AI PROTOTYPING LANDSCAPE ═══ -->
+  <section class="slide content" style="--section-color: var(--cyan);">
+    <h2>AI Prototyping Landscape</h2>
+    <table>
+      <tr><th>Tool</th><th>Best for</th></tr>
+      <tr><td>V0</td><td>React/Next.js, strong UI generation, iterative prompting</td></tr>
+      <tr><td>Lovable</td><td>Full-stack MVPs, instant deploy, good for complex apps</td></tr>
+      <tr><td>Bolt.new</td><td>Quick prototypes, simple interactions</td></tr>
+      <tr><td>Figma Make</td><td>Stays in Figma ecosystem, design-to-code</td></tr>
+    </table>
+    <p class="callout accent mt-lg">Which tools have you tried? What's worked?</p>
+  </section>
+
+  <!-- ═══ 18. DEMO ═══ -->
+  <section class="slide content" style="--section-color: var(--cyan);">
+    <h2>Demo: Sketch to Code</h2>
+    <ol class="steps mt" style="--section-color: var(--cyan);">
+      <li><span>Show a quick sketch + user flow</span></li>
+      <li><span>Prompt AI tool with: flow + photo of sketch + app description</span></li>
+      <li><span>See the output</span></li>
+      <li><span>Discuss: What worked? What needs refinement?</span></li>
+    </ol>
+    <p class="callout accent-cyan mt-lg">What information would AI need to build this screen?</p>
+  </section>
+
+  <!-- ═══ 19. D4 ASSIGNMENT ═══ -->
+  <section class="slide top" style="--section-color: var(--fg-dim);">
+    <h2>D4: User Flow + Sketches + AI Prototype</h2>
+    <p class="small">Due Wednesday, Mar 11 @ 5:15pm</p>
+    <div class="card-row c3 mt">
+      <div class="card" style="--card-color: var(--violet);">
+        <h3>User Flow</h3>
         <p>Core function in 3-4 screens (+ onboarding)</p>
-        <p>Entry point → main screens → decision points → success state</p>
-        <p>Annotations explaining each step</p>
+        <p style="margin-top: 8px;">Annotations explaining each screen</p>
       </div>
-      <div class="policy">
-        <h3 style="color: var(--green);">Paper Prototype</h3>
-        <p>5-6 screens for main feature</p>
-        <p>3-4 screens for secondary features</p>
-        <p>To scale (actual phone size)</p>
-        <p style="color: var(--amber); margin-top: 8px;"><strong>Bring to class Wednesday — you'll test it</strong></p>
+      <div class="card" style="--card-color: var(--green);">
+        <h3>Quick Sketches</h3>
+        <p>Paper sketches of main screens (5-6)</p>
+        <p style="margin-top: 8px;">Photos/scans as process docs</p>
+      </div>
+      <div class="card" style="--card-color: var(--cyan);">
+        <h3>AI Prototype</h3>
+        <p>Working coded prototype</p>
+        <p style="margin-top: 8px;">Deployed link showing core flow</p>
       </div>
     </div>
+    <p class="callout accent mt-lg">Bring your AI prototype to class Wednesday — you'll test it</p>
   </section>
 
-  <!-- ═══ 18. NEXT UP ═══ -->
+  <!-- ═══ 20. NEXT UP ═══ -->
   <section class="slide top" style="--section-color: var(--fg-dim); background: linear-gradient(135deg, #161616 0%, #111 100%);">
     <h2>Next up</h2>
     <div class="mt" style="display: flex; flex-direction: column; gap: 24px;">
       <div>
         <p><strong>Work session</strong> (65 min)</p>
         <ul class="resource-list" style="margin-top: 12px;">
-          <li><span class="label">First 15 min:</span> Write your differentiation strategy (2-3 sentences)</li>
-          <li><span class="label">Next 20 min:</span> Create your user flow diagram — map entry → 3-4 screens → success</li>
-          <li><span class="label">Remaining 30 min:</span> Begin paper prototyping — start with your main feature flow</li>
+          <li><span class="label">First 10 min:</span> Write your differentiation strategy (2-3 sentences)</li>
+          <li><span class="label">Next 15 min:</span> Create user flow diagram with annotations</li>
+          <li><span class="label">Next 15 min:</span> Quick paper sketches at phone scale</li>
+          <li><span class="label">Remaining 25 min:</span> AI prototyping — prompt, iterate, refine</li>
         </ul>
       </div>
       <div>
-        <p><strong>D4: User Flow + Paper Prototype</strong> — due Wed, Mar 11 @ 5:15pm</p>
-        <p style="color: var(--fg-dim); font-size: 1.3rem; margin-top: 8px;">Bring paper prototype to class — you'll test it on Day 18</p>
+        <p><strong>D4: User Flow + Sketches + AI Prototype</strong> — due Wed, Mar 11 @ 5:15pm</p>
+        <p style="color: var(--fg-dim); font-size: 1.3rem; margin-top: 8px;">Bring your AI prototype to class — you'll test it on Day 18</p>
       </div>
     </div>
   </section>
