@@ -546,33 +546,63 @@
     <p class="sub">Traditional skills, new application</p>
   </section>
 
-  <!-- ═══ 19. TRADITIONAL ARTIFACTS, NEW APPLICATION ═══ -->
+  <!-- ═══ 19. WHAT EACH ARTIFACT TELLS AI ═══ -->
   <section class="slide content" style="--section-color: var(--cyan);">
-    <h2>Traditional artifacts, new skill</h2>
-    <p class="big-text">User flow diagrams and sketches are traditional design skills — your professors will require them.</p>
-    <p class="big-text mt">AI prompting is a <em>new skill</em>: transforming these artifacts into effective inputs.</p>
-    <p class="callout accent-cyan mt-lg">The magic is in the synthesis — combining flow + sketches into one coherent prompt.</p>
+    <h2>What each artifact tells AI</h2>
+    <div class="card-row c3 mt">
+      <div class="card" style="--card-color: var(--violet);">
+        <h3>User Flow Diagram</h3>
+        <p>Screen sequence</p>
+        <p>Navigation logic</p>
+        <p>Decision points</p>
+      </div>
+      <div class="card" style="--card-color: var(--green);">
+        <h3>Annotated Sketches</h3>
+        <p>Layout structure</p>
+        <p>Visual hierarchy</p>
+        <p>UI elements & tap targets</p>
+      </div>
+      <div class="card" style="--card-color: var(--cyan);">
+        <h3>Text Prompt</h3>
+        <p>App purpose & context</p>
+        <p>Style direction</p>
+        <p>Tech requirements</p>
+      </div>
+    </div>
+    <p class="callout mt-lg">Upload the visuals directly. The text prompt adds what they <span class="accent-cyan">don't</span> show.</p>
   </section>
 
-  <!-- ═══ 20. THE SYNTHESIS PROCESS ═══ -->
+  <!-- ═══ 20. THE COMBINATION ═══ -->
   <section class="slide content" style="--section-color: var(--cyan);">
-    <h2>The synthesis process</h2>
-    <ol class="numbered mt" style="--section-color: var(--cyan);">
-      <li><strong>User flow → narrative</strong><br><span style="color: var(--fg-dim); font-size: 1.2rem;">Convert your diagram into a story: "User opens app, sees dashboard, taps 'Start'..."</span></li>
-      <li><strong>Sketches → visual reference</strong><br><span style="color: var(--fg-dim); font-size: 1.2rem;">Photo your annotated sketches — annotations give AI context</span></li>
-      <li><strong>Combine into one prompt</strong><br><span style="color: var(--fg-dim); font-size: 1.2rem;">App description + flow narrative + sketch photos + style direction</span></li>
-    </ol>
+    <h2>Combining your artifacts</h2>
+    <div class="policy-pair mt">
+      <div class="policy">
+        <h3 style="color: var(--green);">Visual inputs (upload directly)</h3>
+        <p>• User flow diagram (image)</p>
+        <p>• Annotated sketches (photos)</p>
+        <p style="margin-top: 12px; font-size: 1.15rem; color: var(--fg-dim);">AI can see these — don't describe them in text</p>
+      </div>
+      <div class="policy">
+        <h3 style="color: var(--cyan);">Text prompt (contextual glue)</h3>
+        <p>• App description & purpose</p>
+        <p>• Target user context</p>
+        <p>• Style direction (colors, mood)</p>
+        <p>• Tech stack (React, mobile-first)</p>
+      </div>
+    </div>
+    <p class="callout accent-cyan mt-lg">Don't describe what's in the images — add what's NOT visible.</p>
   </section>
 
   <!-- ═══ 21. EXAMPLE PROMPT STRUCTURE ═══ -->
   <section class="slide content" style="--section-color: var(--cyan);">
-    <h2>Example prompt structure</h2>
-    <div style="background: rgba(255,255,255,0.05); padding: 28px 32px; border-radius: 12px; margin-top: 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 1.25rem; line-height: 1.6;">
-      <p style="color: var(--cyan);">Build a fitness app in React.</p>
-      <p style="margin-top: 16px;"><strong style="color: var(--fg);">User flow:</strong> <span style="color: var(--fg-dim);">User opens to dashboard showing today's goal → taps "Start Workout" → selects workout type → sees countdown timer → completes workout → sees celebration screen with stats.</span></p>
-      <p style="margin-top: 16px; color: var(--green);">[Attach: photos of annotated sketches]</p>
-      <p style="margin-top: 16px;"><strong style="color: var(--fg);">Style:</strong> <span style="color: var(--fg-dim);">Clean, minimal, lots of whitespace. Dark mode. Rounded corners.</span></p>
+    <h2>Example prompt</h2>
+    <div style="background: rgba(255,255,255,0.05); padding: 28px 32px; border-radius: 12px; margin-top: 20px; font-family: 'SF Mono', Menlo, monospace; font-size: 1.2rem; line-height: 1.7;">
+      <p style="color: var(--fg);">Build a fitness tracking app in React. Target user is a busy professional who wants quick 15-minute workouts.</p>
+      <p style="margin-top: 20px; color: var(--violet);">[Attach: user flow diagram]</p>
+      <p style="color: var(--green);">[Attach: annotated sketches]</p>
+      <p style="margin-top: 20px; color: var(--fg);">Style: Clean, minimal, dark mode. Rounded corners, lots of whitespace. Energetic but not aggressive.</p>
     </div>
+    <p class="small mt-lg">Notice: no description of the flow or layout — AI sees that in the images.</p>
   </section>
 
   <!-- ═══ 22. AI TOOLS ═══ -->
@@ -592,11 +622,11 @@
     <h2>Demo: From Artifacts to Code</h2>
     <ol class="steps mt" style="--section-color: var(--cyan);">
       <li><span>Show a user flow diagram + annotated sketches</span></li>
-      <li><span>Synthesize into a single prompt (narrative + photos + style)</span></li>
-      <li><span>Submit to AI tool</span></li>
+      <li><span>Write the contextual prompt (what's NOT in the visuals)</span></li>
+      <li><span>Upload everything to AI tool</span></li>
       <li><span>See the output — discuss what worked</span></li>
     </ol>
-    <p class="callout accent-cyan mt-lg">What information would AI need to build this?</p>
+    <p class="callout accent-cyan mt-lg">What context is missing from these visuals? What would you add?</p>
   </section>
 
   <!-- ═══ 24. D4 ASSIGNMENT ═══ -->
@@ -631,10 +661,10 @@
         <p><strong>Work session</strong> (60 min)</p>
         <ul class="resource-list" style="margin-top: 12px;">
           <li><span class="label">10 min:</span> Write your differentiation strategy</li>
-          <li><span class="label">12 min:</span> Create traditional user flow diagram</li>
+          <li><span class="label">12 min:</span> Create user flow diagram</li>
           <li><span class="label">12 min:</span> Quick annotated sketches at phone scale</li>
-          <li><span class="label">6 min:</span> Synthesize into an AI prompt (narrative + photos)</li>
-          <li><span class="label">20 min:</span> AI prototyping — prompt, iterate, refine</li>
+          <li><span class="label">6 min:</span> Write contextual prompt (what visuals don't show)</li>
+          <li><span class="label">20 min:</span> AI prototyping — upload, iterate, refine</li>
         </ul>
       </div>
       <div>
