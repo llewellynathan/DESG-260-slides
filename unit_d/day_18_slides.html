@@ -559,7 +559,8 @@
     <h2>The Mom Test applies here too</h2>
     <p class="big-text">People will be nice. They'll say they'd use it.</p>
     <p class="big-text mt">Your job is to design questions that reveal <span class="accent-violet">truth</span>, not confirm your hopes.</p>
-    <div class="arrow-flow mt-lg">
+    <p class="callout accent-green mt-lg">You can test with anyone — friends, roommates, family — if you ask the right questions.</p>
+    <div class="arrow-flow mt">
       <div class="box" style="color: var(--red);">"Would you use this?"</div>
       <span class="arrow">→</span>
       <div class="box" style="color: var(--fg-dim);">People say yes to be nice</div>
@@ -569,6 +570,18 @@
       <span class="arrow">→</span>
       <div class="box" style="color: var(--fg);">Reveals actual behavior</div>
     </div>
+  </section>
+
+  <!-- ═══ 16b. MOM TEST QUESTIONS ═══ -->
+  <section class="slide content" style="--section-color: var(--violet);">
+    <h2>Mom Test style questions for prototypes</h2>
+    <p class="callout">Ask about <span class="accent-violet">past behavior</span> and <span class="accent-violet">current reality</span> — not future intentions</p>
+    <ul class="resource-list mt">
+      <li>"How do you currently handle [this problem]?" <span style="color: var(--fg-dim);">→ reveals if problem is real</span></li>
+      <li>"What happened the last time you tried to [task]?" <span style="color: var(--fg-dim);">→ reveals pain points</span></li>
+      <li>"What would you do if this app didn't exist?" <span style="color: var(--fg-dim);">→ reveals alternatives</span></li>
+      <li>"Who else has this problem?" <span style="color: var(--fg-dim);">→ reveals if they're representative</span></li>
+    </ul>
   </section>
 
   <!-- ═══ 17. REWRITE EXERCISE ═══ -->
@@ -686,7 +699,7 @@
       <tr><td style="color: var(--red);">Helping too quickly</td><td>"Oh, you tap here"</td><td>You don't learn where UI fails</td></tr>
       <tr><td style="color: var(--red);">Leading questions</td><td>"You found that easy, right?"</td><td>You get false confirmation</td></tr>
       <tr><td style="color: var(--red);">Defending choices</td><td>"That's because we wanted to..."</td><td>You stop learning</td></tr>
-      <tr><td style="color: var(--red);">Testing with friends</td><td>—</td><td>They'll be too nice</td></tr>
+      <tr><td style="color: var(--red);">Hypothetical questions</td><td>"Would you use this?"</td><td>People say yes to be nice</td></tr>
     </table>
   </section>
 
@@ -702,31 +715,43 @@
   <section class="slide top" style="--section-color: var(--cyan);">
     <h2>D5: Usability Testing Round 1</h2>
     <p class="small">Due Monday, Mar 16 @ 5:15pm</p>
-    <p class="callout mt">Test at least <span class="accent-cyan">3 people</span> outside of class (not classmates, not close friends)</p>
+    <p class="callout mt">Test at least <span class="accent-cyan">5 people</span> outside of class</p>
+    <p class="mt" style="color: var(--fg-dim);">Test anyone — friends, roommates, family, strangers. The skill is asking good questions.</p>
     <div class="mt-lg">
-      <p><strong>Document for each test:</strong></p>
+      <p><strong>Your test should include:</strong></p>
       <ul class="resource-list mt">
-        <li>Who they are (context, not names)</li>
-        <li>Tasks you gave them</li>
-        <li>What happened (observations, not interpretations)</li>
-        <li>Key quotes</li>
-        <li>Usability issues discovered</li>
-        <li>Validation signals (would they use it? why or why not?)</li>
+        <li><span class="label">4-5</span> task-based questions (realistic scenarios)</li>
+        <li><span class="label">1+</span> follow-up question per task (dig into confusion)</li>
+        <li><span class="label">4-5</span> Mom Test style questions (past behavior, not hypotheticals)</li>
       </ul>
     </div>
   </section>
 
-  <!-- ═══ 30. D5 SYNTHESIS ═══ -->
+  <!-- ═══ 30. D5 DOCUMENTATION ═══ -->
   <section class="slide content" style="--section-color: var(--cyan);">
-    <h2>D5 Synthesis Requirements</h2>
-    <p class="big-text">After your 3+ tests, synthesize:</p>
+    <h2>D5: What to Document</h2>
+    <p class="big-text">For each of your 5 tests:</p>
+    <ul class="resource-list mt">
+      <li>Who they are (relationship to you, relevant background)</li>
+      <li>What happened (observations, not interpretations)</li>
+      <li>Key quotes</li>
+      <li>Usability issues discovered</li>
+      <li>Solution validation signals</li>
+    </ul>
+  </section>
+
+  <!-- ═══ 30b. D5 SYNTHESIS ═══ -->
+  <section class="slide content" style="--section-color: var(--cyan);">
+    <h2>D5: Synthesis</h2>
+    <p class="big-text">After your 5 tests, synthesize:</p>
     <ol class="numbered mt" style="--section-color: var(--cyan);">
       <li><strong>Patterns</strong> across tests</li>
       <li><strong>Top 3 usability issues</strong> to fix</li>
       <li><strong>Top 3 solution fit insights</strong></li>
+      <li><strong>Question reflection:</strong> Which questions got honest answers? Which invited polite non-answers?</li>
       <li><strong>What you'll change</strong> in next iteration</li>
     </ol>
-    <p class="callout mt-lg">Submit: PDF with documentation + synthesis</p>
+    <p class="callout mt-lg">Submit: PDF (2 pages — key insights + raw data)</p>
   </section>
 
   <!-- ═══ 31. TEST PLANNING ═══ -->
@@ -735,15 +760,16 @@
     <div class="policy-pair mt">
       <div class="policy">
         <h3>First 10 min: Write your test plan</h3>
-        <p>• 2-3 realistic tasks for your core flow</p>
-        <p>• 3-4 open-ended questions (usability + validation)</p>
+        <p>• 4-5 realistic task-based questions</p>
+        <p>• A follow-up question for each task</p>
+        <p>• 4-5 Mom Test style questions</p>
         <p>• What you're specifically looking for</p>
       </div>
       <div class="policy">
         <h3>Next 10 min: Peer review</h3>
         <p>• Partner identifies: leading questions?</p>
         <p>• Tasks that give hints?</p>
-        <p>• Missing validation questions?</p>
+        <p>• Hypotheticals that should be past behavior?</p>
       </div>
     </div>
   </section>
@@ -816,7 +842,7 @@
       </div>
       <div>
         <p><strong>D5: Usability Testing Round 1</strong> — due Mon, Mar 16 @ 5:15pm</p>
-        <p style="color: var(--fg-dim); font-size: 1.3rem; margin-top: 8px;">Test 3+ people outside class, document observations and quotes, synthesize patterns</p>
+        <p style="color: var(--fg-dim); font-size: 1.3rem; margin-top: 8px;">Test 5 people (anyone!), 4-5 tasks + follow-ups + 4-5 Mom Test questions, synthesize patterns</p>
       </div>
     </div>
   </section>
