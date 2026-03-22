@@ -21,11 +21,43 @@
   a:hover { text-decoration: underline; }
   ul { list-style: none; padding: 0; }
   li { padding: 8px 0; }
+  .resources { margin-bottom: 40px; }
+  .resource-card {
+    display: inline-block;
+    padding: 16px 20px;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    margin-top: 12px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .resource-card:hover {
+    border-color: #444;
+    background: rgba(255,255,255,0.02);
+    text-decoration: none;
+  }
+  .resource-card .rc-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #F0EDE6;
+  }
+  .resource-card .rc-desc {
+    font-size: 0.9rem;
+    color: #9A958C;
+    margin-top: 4px;
+  }
 </style>
 </head>
 <body>
   <h1>DESG 260</h1>
   <p class="sub">Interface & Usability — Winter 2026</p>
+
+  <div class="resources">
+    <h2>Resources</h2>
+    <a href="ui-design-checklist.html" class="resource-card">
+      <div class="rc-title">UI Design Checklist</div>
+      <div class="rc-desc">Audit your high-fidelity screens before submitting</div>
+    </a>
+  </div>
 
   <h2>Unit A: Wayfinding Map & Icons</h2>
   <ul>
@@ -63,6 +95,7 @@
     <li><a href="unit_d/day_18_slides.html">Day 18 — Planning Great Prototype Tests</a></li>
     <li><a href="unit_d/day_19_slides.html">Day 19 — Designing Across Platforms</a></li>
     <li><a href="unit_d/day_20_slides.html">Day 20 — Building a Visual Identity</a></li>
+    <li><a href="unit_d/day_21_slides.html">Day 21 — High-Fidelity Craft</a></li>
   </ul>
 </body>
 </html>
